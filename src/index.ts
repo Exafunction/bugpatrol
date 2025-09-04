@@ -12,6 +12,10 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(express.json());
 
+app.get('/', (req, res) => {
+  res.json({ message: 'Welcome to Bug Rotation Server' });
+});
+
 // Health check endpoint
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
