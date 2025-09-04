@@ -2,14 +2,14 @@
   "version": 2,
   "builds": [
     {
-      "src": "package.json",
+      "src": "src/index.ts",
       "use": "@vercel/node"
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "dist/index.js"
+      "dest": "src/index.ts"
     }
   ],
   "crons": [
@@ -17,8 +17,5 @@
       "path": "/api/bugroundup",
       "schedule": "30 19 * * 1-5"
     }
-  ],
-  "env": {
-    "NODE_ENV": "production"
-  }
+  ]
 }
