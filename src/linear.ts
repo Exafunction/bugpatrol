@@ -1,37 +1,11 @@
-import { LinearClient, LinearFetch, User } from "@linear/sdk";
+import { LinearClient } from "@linear/sdk";
+import { BugRotationIssue, BugRotationRoundup } from "./types";
 import dotenv from "dotenv";
+
 dotenv.config();
 
 const Linear = new LinearClient({ apiKey: process.env.LINEAR_API_KEY });
-
-export interface BugRotationIssue {
-  id: string;
-  title: string;
-  identifier: string;
-  updatedAt: Date;
-  assignee: {
-    id: string;
-    name: string;
-    email: string;
-  } | null;
-  state: {
-    name: string;
-    type: string;
-  };
-  team: {
-    name: string;
-  };
-}
-
-export interface BugRotationRoundup { 
-  assignee: {
-    id: string;
-    name: string;
-    email: string;
-  };
-  issues: BugRotationIssue[];
-}
-
+const BASE_URL = "https://linear.app/hari-windsurf";
 // Gets issues that are in Windsurf-Product team, under the Todo state, assigned, and 
 // have not been updated in over 2d. 
 async function getBugRotationIssues(): Promise<BugRotationIssue[]> {
@@ -68,6 +42,7 @@ async function getBugRotationIssues(): Promise<BugRotationIssue[]> {
         id: issue.id,
         title: issue.title,
         identifier: issue.identifier,
+        link: `${BASE_URL}/issue/${issue.identifier}`,
         updatedAt: issue.updatedAt,
         assignee: assignee ? {
           id: assignee.id,

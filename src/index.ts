@@ -1,6 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import { getBugRotationRoundup } from './linear';
+import { sendBugRotationRoundup } from './slack';
 
 // Load environment variables
 dotenv.config();
@@ -20,11 +21,11 @@ app.get('/health', (req, res) => {
 app.get('/api/bugs', async (req, res) => {
   try {
     const roundup = await getBugRotationRoundup();
-    
+    await sendBugRotationRoundup(roundup);
     // Set content type and pretty print JSON
     res.setHeader('Content-Type', 'application/json');
     res.send(JSON.stringify({ roundup }, null, 2));
-    
+
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch bug status' });
   }
