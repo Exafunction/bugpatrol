@@ -15,7 +15,7 @@
   "crons": [
     {
       "path": "/api/bugroundup",
-      "schedule": "30 19 * * 1-5"
+      "schedule": "30 11 * * 1-5"
     }
   ]
 }
