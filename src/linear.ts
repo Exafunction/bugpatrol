@@ -33,6 +33,13 @@ async function getBugRotationIssues(): Promise<BugRotationIssue[]> {
             eq: "Todo"
           }
         },
+        labels: {
+          some: {
+            name: {
+              eq: "Bug"
+            }
+          }
+        },
         assignee: {
           null: false
         },
