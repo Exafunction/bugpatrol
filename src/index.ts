@@ -18,14 +18,17 @@ app.get('/health', (req, res) => {
 });
 
 // Main cron endpoint for bug status updates
-app.get('/api/bugs', async (req, res) => {
+app.get('/api/bugroundup', async (req, res) => {
   try {
     const roundup = await getBugRotationRoundup();
-    await sendBugRotationRoundup(roundup);
-    // Set content type and pretty print JSON
-    res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify({ roundup }, null, 2));
-
+    if (roundup.length === 0) {
+      res.json({ status: 'No bugs in the roundup', timestamp: new Date().toISOString() });
+    } else {
+      await sendBugRotationRoundup(roundup);
+      // Set content type and pretty print JSON
+      res.setHeader('Content-Type', 'application/json');
+      res.send(JSON.stringify({ roundup }, null, 2));
+    }
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch bug status' });
   }
@@ -35,7 +38,7 @@ app.get('/api/bugs', async (req, res) => {
 app.listen(PORT, () => {
   console.log(`🚀 Bug rotation server running on port ${PORT}`);
   console.log(`📊 Health check: http://localhost:${PORT}/health`);
-console.log(`🐛 Bug update endpoint: http://localhost:${PORT}/api/bugs`);
+console.log(`🐛 Bug Roundup: http://localhost:${PORT}/api/bugroundup`);
 });
 
 export default app;

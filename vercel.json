@@ -14,8 +14,8 @@
   ],
   "crons": [
     {
-      "path": "/api/update-bug-status",
-      "schedule": "0 9 * * 1-5"
+      "path": "/api/bugroundup",
+      "schedule": "30 19 * * 1-5"
     }
   ],
   "env": {
