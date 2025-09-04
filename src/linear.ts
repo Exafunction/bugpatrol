@@ -4,13 +4,24 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const Linear = new LinearClient({ apiKey: process.env.LINEAR_API_KEY });
+let Linear: LinearClient | null = null;
+
+function getLinearClient(): LinearClient {
+  if (!Linear) {
+    if (!process.env.LINEAR_API_KEY) {
+      throw new Error('LINEAR_API_KEY environment variable is required');
+    }
+    Linear = new LinearClient({ apiKey: process.env.LINEAR_API_KEY });
+  }
+  return Linear;
+}
 const BASE_URL = "https://linear.app/hari-windsurf";
 // Gets issues that are in Windsurf-Product team, under the Todo state, assigned, and 
 // have not been updated in over 2d. 
 async function getBugRotationIssues(): Promise<BugRotationIssue[]> {
   try {
-    const linearIssues = await Linear.issues({
+    const linear = getLinearClient();
+    const linearIssues = await linear.issues({
       filter: {
         team: {
           name: {
