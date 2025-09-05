@@ -21,6 +21,15 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
+app.get('/api/bugs', async (req, res) => {
+  try{ 
+    const bugs = await getBugRotationRoundup();
+    res.json(bugs);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch bug status' });
+  }
+});
+
 // Main cron endpoint for bug status updates
 app.get('/api/bugroundup', async (req, res) => {
   try {
@@ -42,7 +51,6 @@ app.get('/api/bugroundup', async (req, res) => {
 app.listen(PORT, () => {
   console.log(`🚀 Bug rotation server running on port ${PORT}`);
   console.log(`📊 Health check: http://localhost:${PORT}/health`);
-console.log(`🐛 Bug Roundup: http://localhost:${PORT}/api/bugroundup`);
 });
 
 export default app;
