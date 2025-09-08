@@ -21,6 +21,7 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
+// Get's bugs without pinging slack
 app.get('/api/bugs', async (req, res) => {
   try{ 
     const bugs = await getBugRotationRoundup();

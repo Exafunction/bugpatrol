@@ -8,7 +8,13 @@ const webClient = new WebClient(process.env.SLACK_BOT_TOKEN);
 
 const getSlackUserIdByEmail = async (email: string): Promise<string | null> => {
   try {
-    const result = await webClient.users.lookupByEmail({ email });
+    // Convert @cognition.ai emails to @windsurf.com emails
+    let lookupEmail = email;
+    if (email.endsWith('@cognition.ai')) {
+      lookupEmail = email.replace('@cognition.ai', '@windsurf.com');
+    }
+    
+    const result = await webClient.users.lookupByEmail({ email: lookupEmail });
     return result.user?.id || null;
   } catch (error) {
     console.error(`Failed to find Slack user for email ${email}:`, error);
@@ -16,11 +22,11 @@ const getSlackUserIdByEmail = async (email: string): Promise<string | null> => {
   }
 };
 
-const issueToString = (issue: BugRotationIssue) => {
+export const issueToString = (issue: BugRotationIssue) => {
     return `• <${issue.link}|[${issue.identifier}]> ${issue.title}`;
 }
 
-const assigneeToString = async (assignee: BugRotationRoundup["assignee"]): Promise<string> => {
+export const assigneeToString = async (assignee: BugRotationRoundup["assignee"]): Promise<string> => {
   const slackUserId = await getSlackUserIdByEmail(assignee.email);
   
   if (slackUserId) {
